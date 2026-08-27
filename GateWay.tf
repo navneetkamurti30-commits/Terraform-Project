@@ -6,13 +6,13 @@ resource "aws_vpc" "main" {
   tags                 = { Name = "internal-architecture-vpc" }
 }
 
-# --- Internet Gateway (Essential for NAT Gateways) ---
+# Internet Gateway
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
   tags   = { Name = "main-igw" }
 }
 
-# --- Public Subnets (For NAT Gateways) ---
+# Public Subnets
 resource "aws_subnet" "public_az1" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.1.0/24"
@@ -29,7 +29,7 @@ resource "aws_subnet" "public_az2" {
   tags                    = { Name = "public-nat-az2" }
 }
 
-# --- Public Route Table (Connects Public Subnets to Internet Gateway) ---
+# Public Route Table (Connects Public Subnets to Internet Gateway) ---
 resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.main.id
 
@@ -51,7 +51,7 @@ resource "aws_route_table_association" "public_az2" {
   route_table_id = aws_route_table.public_rt.id
 }
 
-# --- Private Subnets ---
+# Private Subnets
 resource "aws_subnet" "private_web_az1" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.3.0/24"
@@ -94,7 +94,7 @@ resource "aws_subnet" "private_db_az2" {
   tags              = { Name = "private-db-az2" }
 }
 
-# --- NAT Gateways ---
+# NAT Gateways
 resource "aws_eip" "nat1" { domain = "vpc" }
 resource "aws_eip" "nat2" { domain = "vpc" }
 
@@ -112,7 +112,7 @@ resource "aws_nat_gateway" "nat2" {
   depends_on    = [aws_internet_gateway.igw]
 }
 
-# --- Private Route Tables (Directs Outbound Traffic to NAT Gateways) ---
+# Private Route Tables (Directs Outbound Traffic to NAT Gateways)
 resource "aws_route_table" "private_rt1" {
   vpc_id = aws_vpc.main.id
 
@@ -135,7 +135,7 @@ resource "aws_route_table" "private_rt2" {
   tags = { Name = "private-route-table-az2" }
 }
 
-# --- Route Table Associations for Private Subnets ---
+# Route Table Associations for Private Subnets
 resource "aws_route_table_association" "web_az1" {
   subnet_id      = aws_subnet.private_web_az1.id
   route_table_id = aws_route_table.private_rt1.id

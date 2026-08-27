@@ -4,7 +4,7 @@ resource "aws_db_subnet_group" "main" {
   subnet_ids = [aws_subnet.private_db_az1.id, aws_subnet.private_db_az2.id]
 }
 
-# RDS Instance (Primary and Secondary Sync)
+# RDS Instance
 resource "aws_db_instance" "app_db" {
   allocated_storage      = 20
   engine                 = "mysql"

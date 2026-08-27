@@ -1,7 +1,7 @@
-# --- Web Tier Compute ---
+# Web Tier Compute
 resource "aws_launch_template" "web_lt" {
   name_prefix   = "web-server-"
-  image_id      = "ami-0c7217cdde317cfec" # Generic Amazon Linux 2 AMI
+  image_id      = "ami-0f863d7d5d7cb63e0" # Generic Amazon Linux 2 AMI
   instance_type = "t2.micro"
   network_interfaces { security_groups = [aws_security_group.web_sg.id] }
 }
@@ -18,10 +18,10 @@ resource "aws_autoscaling_group" "web_asg" {
   }
 }
 
-# --- App Tier Compute ---
+# App Tier Compute
 resource "aws_launch_template" "app_lt" {
   name_prefix   = "app-server-"
-  image_id      = "ami-0c7217cdde317cfec"
+  image_id      = "ami-0f863d7d5d7cb63e0"
   instance_type = "t2.micro"
   network_interfaces { security_groups = [aws_security_group.app_sg.id] }
 }
